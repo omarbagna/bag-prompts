@@ -11,14 +11,17 @@ const MyProfile = () => {
 	const router = useRouter();
 
 	const [submitting, setSubmitting] = useState(false);
+	const [fetchingPosts, setFetchingPosts] = useState(false);
 	const [posts, setPosts] = useState([]);
 
 	useEffect(() => {
 		const fetchPosts = async () => {
+			setFetchingPosts(true);
 			const response = await fetch(`/api/users/${session?.user.id}/posts`);
 			const data = await response.json();
 
 			setPosts(data);
+			setFetchingPosts(false);
 		};
 
 		if (session?.user.id) fetchPosts();
@@ -55,6 +58,7 @@ const MyProfile = () => {
 			name="My"
 			desc="Welcome to your personalized profile page"
 			data={posts}
+			fetchingPosts={fetchingPosts}
 			handleEdit={handleEdit}
 			handleDelete={handleDelete}
 		/>
